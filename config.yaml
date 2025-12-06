@@ -2,7 +2,7 @@
 
 ollama:
   host: "http://localhost:11434"
-  model: "dolphin-phi:2.7b"
+  model: "qwen2.5:1.5b"
   timeout: 120  # seconds
 
 personas:

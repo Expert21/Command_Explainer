@@ -163,8 +163,7 @@ class CommandEngine:
         prompt_result = interactive_prompt.format(
             message,
             os_context=self.os_context,
-            shell=self.shell,
-            persona=self.persona.value
+            shell=self.shell
         )
         
         return await self.client.generate(
