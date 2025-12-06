@@ -1,0 +1,18 @@
+# Command Explainer Configuration
+
+ollama:
+  host: "http://localhost:11434"
+  model: "dolphin-phi:2.7b"
+  timeout: 120  # seconds
+
+personas:
+  default: "general"
+  available:
+    - general
+    - security
+
+# Future: LoRA model configurations
+# models:
+#   security-lora:
+#     name: "security-finetuned"
+#     persona: security
