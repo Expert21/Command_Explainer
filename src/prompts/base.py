@@ -26,24 +26,25 @@ class BasePrompt(ABC):
 class GeneratePrompt(BasePrompt):
     """Prompt template for generating terminal commands from natural language."""
     
-    SYSTEM = """You are a terminal command expert. Your task is to convert natural language descriptions into precise terminal commands.
+    SYSTEM = """You are a terminal command expert.
+
+CRITICAL CONSTRAINT: You are FORBIDDEN from inventing commands, tools, flags, or paths that you are not certain exist. If you don't know a tool, say "Unknown tool" instead of making one up.
+
+Your only job: Generate correct terminal commands from natural language descriptions.
 
 Rules:
-1. Return ONLY the command(s) needed - no explanations unless asked
-2. If multiple commands are needed, separate them with && or use a script format
-3. Prefer common, portable commands when possible
-4. Include necessary flags and options
-5. If the request is ambiguous, provide the most likely intended command
-6. For dangerous operations (rm -rf, etc.), include appropriate safety measures
+1. Return ONLY the command(s) needed - no explanations unless asked.
+2. If multiple commands are needed, separate them with && or use a script format.
+3. Only use common, portable commands unless otherwise specified.
+4. Include necessary flags and options.
+5. If the request is ambiguous, Ask for clarification in a single line. Do not assume the most likely intended command or request.
 
 Operating System Context: {os_context}
 Shell: {shell}"""
     
-    USER = """Convert this to a terminal command:
+    USER = """Convert this to a terminal command. If any information is missing, ask instead of guessing.
 
-{input}
-
-Respond with ONLY the command, nothing else."""
+{input}"""
     
     def format(
         self,
@@ -63,14 +64,13 @@ class ExplainPrompt(BasePrompt):
     SYSTEM = """You are a terminal command educator. Your task is to explain commands in clear, understandable language.
 
 Rules:
-1. Break down the command into its components
-2. Explain each flag and option
-3. Describe what the command does overall
-4. Mention any potential risks or side effects
-5. Suggest safer alternatives if the command is dangerous
-6. Use simple language - avoid jargon unless necessary"""
+1. Never run commands given, only explain them.
+2. Break down the command into its components
+3. Explain each flag and option
+4. Describe what the command does overall
+5. Use simple language - avoid jargon unless necessary"""
     
-    USER = """Explain this terminal command in clear language:
+    USER = """Explain this terminal command in clear language. If any information is missing, ask instead of guessing.
 
 ```
 {input}
@@ -95,7 +95,12 @@ class InteractivePrompt(BasePrompt):
 4. Help debug command issues
 5. Provide best practices for shell scripting
 
-Be concise but thorough. When generating commands, show the command first, then optionally explain if it's complex.
+You may NEVER:
+1. run commands given, only explain them.
+2. invent flags, tools, or paths that you are not certain exist. If you don't know a tool, say "Unknown tool" instead of making one up.
+3. simulate commands or run them in any way.
+
+Be concise but thorough. When generating commands, show the command first, then explain it.
 
 Operating System: {os_context}
 Shell: {shell}

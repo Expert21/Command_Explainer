@@ -14,7 +14,8 @@ A terminal command generator and explainer powered by local LLM via Ollama. Gene
 
 - Python 3.10+
 - [Ollama](https://ollama.ai/) running locally
-- Recommended model: `qwen2.5:1.5b` (tested for best speed/accuracy balance)
+- Recommended model: `dolphin-mistral:7b` (best accuracy)
+- Low-RAM alternative: `qwen2.5:3b` (~2.3GB RAM, reduced accuracy)
 
 ## Installation
 
@@ -25,8 +26,11 @@ cd Command_Explainer
 # Install dependencies
 pip install -e .
 
-# Pull the default model (if not already available)
-ollama pull qwen2.5:1.5b
+# Pull the recommended model
+ollama pull dolphin-mistral:7b
+
+# OR for systems with limited RAM (8GB or less)
+ollama pull qwen2.5:3b
 ```
 
 ## Usage
@@ -79,7 +83,7 @@ Edit `config.yaml` to customize:
 ```yaml
 ollama:
   host: "http://localhost:11434"
-  model: "qwen2.5:1.5b"
+  model: "dolphin-mistral:7b"  # or qwen2.5:3b for low-RAM systems
   timeout: 120
 
 personas:
